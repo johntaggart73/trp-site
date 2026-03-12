@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The Recurrence Protocol by John Taggart — A signal no one was meant to find. A countdown twelve thousand years in the making." />
+  <title>The Recurrence Protocol — John Taggart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:         #080a0f;
+      --bg-surface: #0d1018;
+      --gold:       #c9a84c;
+      --gold-dim:   #a07c2e;
+      --text:       #e2d8c8;
+      --text-muted: #8a7f6f;
+      --text-dim:   #3e3a32;
+      --border:     #1e2130;
+      --border-gold: rgba(201,168,76,0.2);
+      --teal:       #4a9ea8;
+
+      --serif-display: 'Cormorant Garamond', Georgia, serif;
+      --serif-body:    'Crimson Pro', Georgia, serif;
+      --sans:          'Lato', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--serif-body);
+      font-size: 18px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /*/* Full bleed background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 8%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 72% 5%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(1px 1px at 88% 25%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 10% 45%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 70%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 45% 90%, rgba(255,255,255,0.2) 0%, transparent 100%);
+    }
+
+    /* Grain */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.02;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(8,10,15,0.9) 0%, transparent 100%);
+    }
+
+    .nav-author {
+      font-family: var(--sans);
+      font-size: 0.62rem;
+      font-weight: 300;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.25s;
+    }
+    .nav-author:hover { color: var(--gold); }
+
+    .nav-series {
+      font-family: var(--sans);
+      font-size: 0.58rem;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      padding: 6rem 0 4rem;
+    }
+
+    /* deep space gradient on left */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(74,158,168,0.04) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 20%, rgba(201,168,76,0.03) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-cover {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 3rem 2rem 4rem;
+      position: relative;
+    }
+
+    .hero-cover img {
+      width: 100%;
+      max-width: 360px;
+      box-shadow:
+        0 0 60px rgba(74,158,168,0.12),
+        0 0 120px rgba(74,158,168,0.06),
+        0 40px 80px rgba(0,0,0,0.6);
+      position: relative;
+      z-index: 1;
+      animation: coverFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes coverFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* glow behind cover */
+    .hero-cover::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px; height: 400px;
+      background: radial-gradient(ellipse, rgba(74,158,168,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-text {
+      padding: 2rem 4rem 2rem 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--sans);
+      font-size: 0.6rem;
+      font-weight: 300;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--teal);
+      opacity: 0.8;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    .hero-title {
+      font-family: var(--serif-display);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title .the {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      display: block;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 300;
+      margin-bottom: 0.3rem;
+    }
+
+    .hero-title .main {
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      display: block;
+      line-height: 0.95;
+    }
+
+    .hero-author {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.8;
+      margin-bottom: 2rem;
+      display: block;
+    }
+
+    .hero-rule {
+      width: 50px;
+      height: 1px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      margin-bottom: 2rem;
+      opacity: 0.5;
+    }
+
+    .hero-hook {
+      font-family: var(--serif-display);
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-hook strong {
+      color: var(--text);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    .hero-synopsis {
+      font-size: 0.97rem;
+      line-height: 1.85;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-synopsis p + p { margin-top: 1rem; }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--gold);
+      padding: 0.9rem 2rem;
+      transition: background 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .btn-primary:hover { background: #e8c468; }
+
+    .btn-secondary {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 0.9rem 2rem;
+      transition: border-color 0.25s, color 0.25s;
+    }
+    .btn-secondary:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+    /* SERIES BAR */
+    .series-bar {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      background: var(--bg-surface);
+    }
+
+    .series-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .series-inner span {
+      font-family: var(--sans);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .series-inner strong {
+      font-family: var(--serif-display);
+      font-size: 1rem;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .series-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      opacity: 0.5;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-copy {
+      font-family: var(--sans);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+    }
+
+    .footer-home {
+      font-family: var(--sans);
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: color 0.2s;
+    }
+    .footer-home:hover { color: var(--gold); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up { animation: fadeUp 0.9s ease both; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.25s; }
+    .delay-3 { animation-delay: 0.4s; }
+    .delay-4 { animation-delay: 0.6s; }
+    .delay-5 { animation-delay: 0.8s; }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 7rem;
+        text-align: center;
+      }
+      .hero-cover { padding: 1rem 3rem; }
+      .hero-cover img { max-width: 260px; }
+      .hero-text { padding: 2rem 1.5rem; }
+      .hero-rule { margin-left: auto; margin-right: auto; }
+      .hero-cta-group { justify-content: center; }
+      .series-inner { flex-direction: column; gap: 0.8rem; }
+      .series-dot { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero-bg" aria-hidden="true"></div>
+
+  <nav>
+    <a href="https://www.johnwtaggart.com" class="nav-author">John Taggart</a>
+    <span class="nav-series">The Protocol Series · Book I</span>
+  </nav>
+
+  <main class="hero">
+    <div class="hero-cover fade-up">
+      <img src="trp-cover.jpg" alt="The Recurrence Protocol book cover — ancient stone monuments under a night sky with a comet" />
+    </div>
+
+    <div class="hero-text">
+      <span class="hero-eyebrow fade-up delay-1">Now Available</span>
+
+      <h1 class="hero-title fade-up delay-2">
+        <span class="the">The</span>
+        <span class="main">Recurrence<br>Protocol</span>
+      </h1>
+
+      <span class="hero-author fade-up delay-2">John Taggart</span>
+
+      <div class="hero-rule fade-up delay-3"></div>
+
+      <p class="hero-hook fade-up delay-3">
+        <strong>A signal no one was meant to find.<br>A countdown twelve thousand years in the making.</strong>
+      </p>
+
+      <div class="hero-synopsis fade-up delay-4">
+        <p>When NASA astronomer Daniel detects an anomaly in the world's atomic clocks, he traces it to a twelve-thousand-year-old monument in southeastern Turkey — and to a classified program that has been monitoring the same signal since 1945.</p>
+        <p>With the cover-up unraveling, the anomaly accelerating, and no modern infrastructure prepared for what is coming, Daniel and archaeologist Miriam Hale race to decode what the builders of Göbekli Tepe encoded in stone: not a warning.</p>
+        <p><em>An instruction.</em></p>
+      </div>
+
+      <div class="hero-cta-group fade-up delay-5">
+        <a href="https://a.co/d/0hviHnxT" target="_blank" rel="noopener" class="btn-primary">
+          Order on Amazon
+          <svg width="12" height="10" viewBox="0 0 12 10" fill="none" aria-hidden="true">
+            <path d="M1 5h10M6 1l4 4-4 4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="https://www.johnwtaggart.com" class="btn-secondary">Author Site</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="series-bar">
+    <div class="series-inner">
+      <span>Book I</span>
+      <div class="series-dot"></div>
+      <strong>The Protocol Series</strong>
+      <div class="series-dot"></div>
+      <span>John Taggart</span>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-copy">&copy; 2026 John Taggart. All rights reserved.</span>
+      <a href="https://www.johnwtaggart.com" class="footer-home">← johnwtaggart.com</a>
+    </div>
+  </footer>
+
+</body>
+</html>
