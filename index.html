@@ -392,6 +392,72 @@
       .series-inner { flex-direction: column; gap: 0.8rem; }
       .series-dot { display: none; }
     }
+
+    /* NEWSLETTER */
+    .nl-wrap {
+      margin-top: 2.2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .nl-label {
+      font-family: var(--sans);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+    .nl-form {
+      display: flex;
+      gap: 0;
+      max-width: 400px;
+    }
+    .nl-form input {
+      flex: 1;
+      background: rgba(6,8,14,0.7);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-right: none;
+      color: var(--text);
+      font-family: var(--serif-body);
+      font-size: 0.9rem;
+      padding: 0.85rem 1rem;
+      outline: none;
+      backdrop-filter: blur(4px);
+      transition: border-color 0.25s;
+    }
+    .nl-form input::placeholder { color: var(--text-dim); }
+    .nl-form input:focus { border-color: var(--gold-dim); }
+    .nl-form button {
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      font-family: var(--sans);
+      font-size: 0.6rem;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 1.4rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.25s;
+    }
+    .nl-form button:hover { background: #e8c468; }
+    #trp-nl-msg {
+      display: none;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-top: 0.6rem;
+    }
+    .nl-disclaimer {
+      font-family: var(--sans);
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      margin-top: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -430,8 +496,19 @@
         <p><em>An instruction.</em></p>
       </div>
 
+
+      <div class="nl-wrap fade-up delay-5">
+        <span class="nl-label">Get updates on Book II and the full series</span>
+        <form class="nl-form" onsubmit="handleTRPSignup(event)">
+          <input type="email" id="trp-nl-email" placeholder="your@email.com" required autocomplete="email" />
+          <button type="submit">Subscribe</button>
+        </form>
+        <p id="trp-nl-msg">You're on the list. Thank you.</p>
+        <p class="nl-disclaimer">No spam. Unsubscribe any time.</p>
+      </div>
+
       <div class="hero-cta-group fade-up delay-5">
-        <a href="https://a.co/d/0hviHnxT" target="_blank" rel="noopener" class="btn-primary">
+        <a href="https://a.co/d/06tgzZIH" target="_blank" rel="noopener" class="btn-primary">
           Order on Amazon
           <svg width="12" height="10" viewBox="0 0 12 10" fill="none" aria-hidden="true">
             <path d="M1 5h10M6 1l4 4-4 4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
@@ -459,5 +536,36 @@
     </div>
   </footer>
 
+
+  <script>
+    async function handleTRPSignup(e) {
+      e.preventDefault();
+      const email = document.getElementById('trp-nl-email').value;
+      const btn = e.target.querySelector('button');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+      try {
+        const res = await fetch('https://connect.mailerlite.com/api/subscribers', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiYTJiMjQ5ODEyZDM1M2VhZjNiOTI2ZjFjYzcwZTQ4YjA0MGJjMzJjNGEyYjE2MzhiY2Q3OTY0ZWJiM2E3NmVhMTI4YzRkMzhmYmJkMWE1NGYiLCJpYXQiOjE3NzMzOTc4NDQuNTAyMDExLCJuYmYiOjE3NzMzOTc4NDQuNTAyMDEzLCJleHAiOjQ5MjkwNzE0NDQuNDk1MjUsInN1YiI6IjIyMDUyNzUiLCJzY29wZXMiOltdfQ.r7K6iT6RGcKoiFY75xqIS5onmL7yHXRQ2LF8pjQzguERJNSGQBHn2-F9bZOiPxEEiqRNUqvGrpCovdHEa52RzGFLjxGL5jLbuw6xUEPSlGt1kgMlRibot3C31f6K0g_pxtFKlDn2RdUb1txhg6GDcpn_hgox8y5wviB99fHdzu1zujiPwICiDM3WOwpSxRCeIFzJ1ZqPSkZqQZaC01VzocLo2cfjSsyg2hMzbXIOUvXYnCNywAkhH_4fr_TN_FEr9-FN3wV7XaitvHIKoY0weZNPZ43sOn1Di84rclc7qubbqjgW9IBqwpL_tlcJ4tjm2tPzWj-dYSRCMyfsve35gX-Avp_SYbGuMVajG2AdPwdqoJsKxyB3M_WKB4d3HoaubTPpIhAi4KdmDytavMIKvpSd9Xm65A8Bf0APn940Tiy0AwRpGg2Xuhz0m83mTjcMdSt-OfmUgDWc6PcCxpxSCv9sY2L_l-_gUk4-MFnGP-U5N-nZrsPpI4GKnbQWG7v8v2enY_Q7R_d65IwANAfya-7_869bNFhnA1QA8uJg-Xzbb6ccWBJWpP7iWkkNgqkxq2RzO6Uh-h3xLlSLWopIKdEvXeJ63M0EeHzdf_x4w2ZakNQDFgF3FGxxzV_4jrSnpMFzmeo8MInPV82t_bn--a3zjsFJwYHSRPdOszAWxbU'
+          },
+          body: JSON.stringify({ email: email, groups: ['181820865412859816'] })
+        });
+        if (res.status === 200 || res.status === 201) {
+          document.getElementById('trp-nl-msg').style.display = 'block';
+          document.getElementById('trp-nl-email').value = '';
+          btn.textContent = 'Subscribed!';
+        } else {
+          btn.textContent = 'Try again';
+          btn.disabled = false;
+        }
+      } catch(err) {
+        btn.textContent = 'Try again';
+        btn.disabled = false;
+      }
+    }
+  </script>
 </body>
 </html>
